@@ -63,7 +63,7 @@ while True:
         # * handle jika isi list kosong
         else:
             debug_cuy('⏳ isi pesan kosong, menunggu pesan baru, cek setiap 1 menit, sisa limit ' + str(api.rate_limit_status()['resources']['direct_messages']['/direct_messages/events/list']['remaining']))
-        # sleep(60)
+        sleep(60)
     # ! handle jika ada error
     except tweepy.RateLimitError as e:
         debug_cuy('😡 ' + e.response.json()['errors'][0]['message'].lower())
