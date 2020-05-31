@@ -25,38 +25,46 @@ def make_tweet(text):
 
 
 while True:
-  list = api.list_direct_messages()
-  list.reverse()  # * mengurutkan dari yang terlama
-  if len(list) is not 0:
-    for x in range(len(list)):
-      message_id = list[x].id
-      message_data = list[x].message_create['message_data']
-      try:
-        # * ada attachment
-        message_data_attachment_media_type = message_data['attachment']['media']['type']
-        if message_data_attachment_media_type == 'photo':
-          debugCuy('berisi photo belom support')
-          delete_message(message_id)
-        elif message_data_attachment_media_type == 'video':
-          debugCuy('berisi video belom support')
-          delete_message(message_id)
-        else:
-          print(message_data)
-          delete_message(message_id)
-      except:
-        # * tidak ada attachment
-        message_data_text = message_data['text']
-        debugCuy('ada pesan "'+message_data_text+'"')
-        # * cek ada keyword
-        if "[asking]" in message_data_text and len(message_data_text) <= 280:
-          debugCuy('pesan sesuai')
-          make_tweet(message_data_text)
-          delete_message(message_id)
-        else:
-          debugCuy('pesan tidak sesuai kriteria')
-          delete_message(message_id)
-      debugCuy('--')
-  else:
-    debugCuy('kosong, menunggu pesan baru')
-  debugCuy('sisa limit ' + str(api.rate_limit_status()['resources']['direct_messages']['/direct_messages/events/list']['remaining']))
-  sleep(60)
+  # * mencoba mengambil pesan
+  try:
+    list = api.list_direct_messages()
+    list.reverse()  # * mengurutkan dari yang terlama
+    # * cek isi list tidak 0
+    if len(list) is not 0:
+      for x in range(len(list)):
+        message_id = list[x].id
+        message_data = list[x].message_create['message_data']
+        # * mencoba cek ada attachment tidak
+        try:
+          message_data_attachment_media_type = message_data['attachment']['media']['type']
+          if message_data_attachment_media_type == 'photo':
+            debugCuy('berisi photo belom support')
+            delete_message(message_id)
+          elif message_data_attachment_media_type == 'video':
+            debugCuy('berisi video belom support')
+            delete_message(message_id)
+          else:
+            print(message_data)
+            delete_message(message_id)
+        # * handle jika cuma text
+        except:
+          message_data_text = message_data['text']
+          debugCuy('ada pesan "'+message_data_text+'"')
+          # * cek ada keyword
+          if "[asking]" in message_data_text and len(message_data_text) <= 280:
+            debugCuy('pesan sesuai')
+            make_tweet(message_data_text)
+            delete_message(message_id)
+          else:
+            debugCuy('pesan tidak sesuai kriteria')
+            delete_message(message_id)
+        debugCuy('--')
+    # * handle jika isi list kosong
+    else:
+      debugCuy('isi pesan kosong, menunggu pesan baru, cek setiap 1 menit, sisa limit ' + str(api.rate_limit_status()['resources']['direct_messages']['/direct_messages/events/list']['remaining']))
+    sleep(60)
+  # ! handle jika ada error
+  except Exception as e:
+    debugCuy(e)
+    sleep(60)
+    pass
