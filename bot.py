@@ -15,12 +15,12 @@ def debugCuy(text):
 
 
 def delete_message(message_id):
-  debugCuy("menghapus pesan dengan id " + str(message_id))
+  debugCuy("🗑 menghapus pesan dengan id " + str(message_id))
   api.destroy_direct_message(message_id)
 
 
 def make_tweet(text):
-  debugCuy("membuat tweet baru")
+  debugCuy("😃 membuat tweet baru")
   api.update_status(text)
 
 
@@ -34,33 +34,33 @@ while True:
       for x in range(len(list)):
         message_id = list[x].id
         message_data = list[x].message_create['message_data']
-        debugCuy('ada pesan "'+message_data_text+'"')
+        message_data_text = message_data['text']
+        debugCuy('💌 ada pesan "'+message_data_text+'"')
         # * cek ada keyword
         if "[asking]" in message_data_text and len(message_data_text) <= 280:
-          debugCuy('keyword pesan sesuai')
+          debugCuy('👍 kriteria pesan sesuai')
           # * mencoba cek ada attachment tidak
           try:
             message_data_attachment_media_type = message_data['attachment']['media']['type']
             if message_data_attachment_media_type == 'photo':
-              debugCuy('berisi photo belom support')
+              debugCuy('😓 belom support photo')
               delete_message(message_id)
             elif message_data_attachment_media_type == 'video':
-              debugCuy('berisi video belom support')
+              debugCuy('😓 belom support video')
               delete_message(message_id)
             else:
               print(message_data)
               delete_message(message_id)
           # * handle jika cuma text
           except:
-            message_data_text = message_data['text']
             make_tweet(message_data_text)
             delete_message(message_id)
         else:
-          debugCuy('pesan tidak sesuai kriteria')
+          debugCuy('👎 pesan tidak sesuai kriteria')
           delete_message(message_id)
     # * handle jika isi list kosong
     else:
-      debugCuy('isi pesan kosong, menunggu pesan baru, cek setiap 1 menit, sisa limit ' + str(api.rate_limit_status()['resources']['direct_messages']['/direct_messages/events/list']['remaining']))
+      debugCuy('⏳ isi pesan kosong, menunggu pesan baru, cek setiap 1 menit, sisa limit ' + str(api.rate_limit_status()['resources']['direct_messages']['/direct_messages/events/list']['remaining']))
     sleep(60)
   # ! handle jika ada error
   except Exception as e:
