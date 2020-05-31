@@ -12,3 +12,7 @@
 ## run
 
 `python bot.py`
+
+## screenshot
+
+![ss](screenshot/ss.png)
