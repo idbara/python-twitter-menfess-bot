@@ -27,7 +27,7 @@ def make_tweet(text):
 while True:
   list = api.list_direct_messages()
   list.reverse()  # * mengurutkan dari yang terlama
-  if list is not 0:
+  if len(list) is not 0:
     for x in range(len(list)):
       message_id = list[x].id
       message_data = list[x].message_create['message_data']
@@ -58,4 +58,5 @@ while True:
       debugCuy('--')
   else:
     debugCuy('kosong, menunggu pesan baru')
+  debugCuy('sisa limit ' + str(api.rate_limit_status()['resources']['direct_messages']['/direct_messages/events/list']['remaining']))
   sleep(60)
