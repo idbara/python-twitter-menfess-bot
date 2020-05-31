@@ -11,7 +11,7 @@ api = tweepy.API(auth)
 
 
 def debugCuy(text):
-  print(pytz.timezone("Asia/Jakarta").localize(datetime.now()).strftime("%H:%M:%S") + ' => ' + text)
+  print(pytz.timezone("Asia/Jakarta").localize(datetime.now()).strftime("%H:%M:%S") + ' => ' + str(text))
 
 
 def delete_message(message_id):
@@ -20,8 +20,12 @@ def delete_message(message_id):
 
 
 def make_tweet(text):
-  debugCuy("😃 membuat tweet baru")
-  api.update_status(text)
+  try:
+    debugCuy("😃 membuat tweet baru")
+    api.update_status(text)
+  except Exception as e:
+    debugCuy('😡 ' + e)
+    pass
 
 
 while True:
