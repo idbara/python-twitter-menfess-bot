@@ -24,7 +24,7 @@ def make_tweet(text):
         debugCuy("🚀 membuat tweet baru")
         api.update_status(text)
     except tweepy.TweepError as e:
-        debugCuy('😡 ' + e.response.json()['errors'][0]['message'])
+        debugCuy('😡 ' + e.response.json()['errors'][0]['message'].lower())
         pass
 
 
@@ -63,12 +63,12 @@ while True:
         # * handle jika isi list kosong
         else:
             debugCuy('⏳ isi pesan kosong, menunggu pesan baru, cek setiap 1 menit, sisa limit ' + str(api.rate_limit_status()['resources']['direct_messages']['/direct_messages/events/list']['remaining']))
-        sleep(60)
+        # sleep(60)
     # ! handle jika ada error
     except tweepy.RateLimitError as e:
-        debugCuy('😡 ' + e.response.json()['errors'][0]['message'])
+        debugCuy('😡 ' + e.response.json()['errors'][0]['message'].lower())
         sleep(60)
         pass
     except tweepy.TweepError as e:
-        debugCuy('😡 ' + e.response.json()['errors'][0]['message'])
+        debugCuy('😡 ' + e.response.json()['errors'][0]['message'].lower())
         pass
