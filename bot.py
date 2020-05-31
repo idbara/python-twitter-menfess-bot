@@ -24,7 +24,7 @@ def make_tweet(text):
         debugCuy("🚀 membuat tweet baru")
         api.update_status(text)
     except tweepy.TweepError as e:
-        debugCuy('😡 ' + e.response.json())
+        debugCuy('😡 ' + e.response.json()['errors'][0]['message'])
         pass
 
 
@@ -49,14 +49,12 @@ while True:
                         if message_data_attachment_media_type == 'photo':
                             debugCuy('😓 belom support photo')
                             delete_message(message_id)
-                        elif message_data_attachment_media_type == 'video':
-                            debugCuy('😓 belom support video')
-                            delete_message(message_id)
                         else:
-                            print(message_data)
+                            debugCuy('😓 belom support video')
                             delete_message(message_id)
                     # * handle jika cuma text
                     except:
+                        # * membuat tweet
                         make_tweet(message_data_text)
                         delete_message(message_id)
                 else:
@@ -72,5 +70,5 @@ while True:
         sleep(60)
         pass
     except tweepy.TweepError as e:
-        debugCuy('😡 ' + e.response.json())
+        debugCuy('😡 ' + e.response.json()['errors'][0]['message'])
         pass
