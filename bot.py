@@ -10,21 +10,21 @@ auth.set_access_token(config.access_token, config.access_token_secret)
 api = tweepy.API(auth)
 
 
-def debugCuy(text):
+def debug_cuy(text):
     print(pytz.timezone("Asia/Jakarta").localize(datetime.now()).strftime("%H:%M:%S") + ' => ' + str(text))
 
 
 def delete_message(message_id):
-    debugCuy("👋 menghapus pesan dengan id " + str(message_id))
+    debug_cuy("👋 menghapus pesan dengan id " + str(message_id))
     api.destroy_direct_message(message_id)
 
 
 def make_tweet(text):
     try:
-        debugCuy("🚀 membuat tweet baru")
+        debug_cuy("🚀 membuat tweet baru")
         api.update_status(text)
     except tweepy.TweepError as e:
-        debugCuy('😡 ' + e.response.json()['errors'][0]['message'].lower())
+        debug_cuy('😡 ' + e.response.json()['errors'][0]['message'].lower())
         pass
 
 
@@ -39,18 +39,18 @@ while True:
                 message_id = list[x].id
                 message_data = list[x].message_create['message_data']
                 message_data_text = message_data['text']
-                debugCuy('💌 ada pesan "'+message_data_text+'"')
+                debug_cuy('💌 ada pesan "'+message_data_text+'"')
                 # * cek ada keyword
                 if "[ask]" or "[Ask]" or "[ASK]" in message_data_text and len(message_data_text) <= 280:
-                    debugCuy('👍 kriteria pesan sesuai')
+                    debug_cuy('👍 kriteria pesan sesuai')
                     # * mencoba cek ada attachment tidak
                     try:
                         message_data_attachment_media_type = message_data['attachment']['media']['type']
                         if message_data_attachment_media_type == 'photo':
-                            debugCuy('😓 belom support photo')
+                            debug_cuy('😓 belom support photo')
                             delete_message(message_id)
                         else:
-                            debugCuy('😓 belom support video')
+                            debug_cuy('😓 belom support video')
                             delete_message(message_id)
                     # * handle jika cuma text
                     except:
@@ -58,17 +58,17 @@ while True:
                         make_tweet(message_data_text)
                         delete_message(message_id)
                 else:
-                    debugCuy('👎 pesan tidak sesuai kriteria')
+                    debug_cuy('👎 pesan tidak sesuai kriteria')
                     delete_message(message_id)
         # * handle jika isi list kosong
         else:
-            debugCuy('⏳ isi pesan kosong, menunggu pesan baru, cek setiap 1 menit, sisa limit ' + str(api.rate_limit_status()['resources']['direct_messages']['/direct_messages/events/list']['remaining']))
+            debug_cuy('⏳ isi pesan kosong, menunggu pesan baru, cek setiap 1 menit, sisa limit ' + str(api.rate_limit_status()['resources']['direct_messages']['/direct_messages/events/list']['remaining']))
         # sleep(60)
     # ! handle jika ada error
     except tweepy.RateLimitError as e:
-        debugCuy('😡 ' + e.response.json()['errors'][0]['message'].lower())
+        debug_cuy('😡 ' + e.response.json()['errors'][0]['message'].lower())
         sleep(60)
         pass
     except tweepy.TweepError as e:
-        debugCuy('😡 ' + e.response.json()['errors'][0]['message'].lower())
+        debug_cuy('😡 ' + e.response.json()['errors'][0]['message'].lower())
         pass
