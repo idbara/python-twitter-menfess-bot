@@ -44,7 +44,7 @@ while True:
                 if config.keywords in message_data_text and len(message_data_text) <= 280:
                     debug_cuy('👍 kriteria pesan sesuai')
                     # * menghapus keyword dari text
-                    message_data_text = message_data_text.replace('config.keywords', '')
+                    message_data_text = message_data_text.replace(config.keywords, '')
                     # * mencoba cek ada attachment tidak
                     try:
                         message_data_attachment_media_type = message_data['attachment']['media']['type']
