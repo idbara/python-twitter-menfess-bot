@@ -15,16 +15,16 @@ def debugCuy(text):
 
 
 def delete_message(message_id):
-  debugCuy(" menghapus pesan dengan id " + str(message_id))
+  debugCuy("👋 menghapus pesan dengan id " + str(message_id))
   api.destroy_direct_message(message_id)
 
 
 def make_tweet(text):
   try:
-    debugCuy("😃 membuat tweet baru")
+    debugCuy("🚀 membuat tweet baru")
     api.update_status(text)
-  except tweepy.TweepError as t:
-    debugCuy('😡 ' + t.response.text.errors.message)
+  except tweepy.TweepError as e:
+    debugCuy('😡 ' + e.response.json())
     pass
 
 
@@ -67,10 +67,10 @@ while True:
       debugCuy('⏳ isi pesan kosong, menunggu pesan baru, cek setiap 1 menit, sisa limit ' + str(api.rate_limit_status()['resources']['direct_messages']['/direct_messages/events/list']['remaining']))
     sleep(60)
   # ! handle jika ada error
-  except tweepy.RateLimitError:
-    debugCuy('😡 kena limit dari twitter, menambah delay')
+  except tweepy.RateLimitError as e:
+    debugCuy('😡 ' + e.response.json()['errors'][0]['message'])
     sleep(60)
     pass
-  except tweepy.TweepError as t:
-    debugCuy('😡 ' + t.response.text.errors.message)
+  except tweepy.TweepError as e:
+    debugCuy('😡 ' + e.response.json())
     pass
