@@ -41,7 +41,7 @@ while True:
                 message_data_text = message_data['text']
                 debug_cuy('💌 ada pesan "'+message_data_text+'"')
                 # * cek ada keyword
-                if "[ask]" or "[Ask]" or "[ASK]" in message_data_text and len(message_data_text) <= 280:
+                if config.keywords in message_data_text and len(message_data_text) <= 280:
                     debug_cuy('👍 kriteria pesan sesuai')
                     # * mencoba cek ada attachment tidak
                     try:
