@@ -58,7 +58,6 @@ while True:
           else:
             debugCuy('pesan tidak sesuai kriteria')
             delete_message(message_id)
-        debugCuy('--')
     # * handle jika isi list kosong
     else:
       debugCuy('isi pesan kosong, menunggu pesan baru, cek setiap 1 menit, sisa limit ' + str(api.rate_limit_status()['resources']['direct_messages']['/direct_messages/events/list']['remaining']))
