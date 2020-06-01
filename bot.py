@@ -65,31 +65,40 @@ while True:
                 message_data = list[x].message_create['message_data']
                 text = message_data['text']
                 debug_cuy('💌 ada pesan "'+text+'"')
-                # * cek ada keyword
+                # * cek ada kata kunci
                 if config.keywords in text and len(text) <= 280:
-                    debug_cuy('👍 kriteria pesan sesuai')
-                    # * menghapus keyword dari text
+                    debug_cuy('👍 pesan berisi kata kunci')
+                    # * bersihkan kata kunci dari text
                     text = text.replace(config.keywords, '')
-                    # * mencoba cek ada attachment tidak
-                    try:
-                        attachment_media = message_data['attachment']['media']
-                        media_type = attachment_media['type']
-                        media_url = attachment_media['media_url']
-                        if media_type == 'photo':
-                            debug_cuy('🏙 pesan berisi gambar')
-                            download_photo(media_url)
-                            make_tweet_with_image(temp_img, text)
+                    # * proses jika text tidak kosong setelah di bersihkan
+                    if text is not '':
+                        # * mencoba cek ada attachment tidak
+                        try:
+                            attachment_media = message_data['attachment']['media']
+                            media_type = attachment_media['type']
+                            media_url = attachment_media['media_url']
+                            url = attachment_media['url']
+                            if media_type == 'photo':
+                                debug_cuy('🏙  pesan berisi gambar')
+                                download_photo(media_url)
+                                # * hapus url pada text
+                                text = text.replace(url, '')
+                                # * bikin tweet dengan gambar
+                                make_tweet_with_image(temp_img, text)
+                                delete_message(message_id)
+                            else:
+                                debug_cuy('😓 tidak boleh video')
+                                delete_message(message_id)
+                        # * handle jika cuma text
+                        except:
+                            # * bikin tweet
+                            make_tweet(text)
                             delete_message(message_id)
-                        else:
-                            debug_cuy('😓 tidak boleh video')
-                            delete_message(message_id)
-                    # * handle jika cuma text
-                    except:
-                        # * membuat tweet
-                        make_tweet(text)
+                    else:
+                        debug_cuy('👎 text setelah kata kunci kosong')
                         delete_message(message_id)
                 else:
-                    debug_cuy('👎 pesan tidak sesuai kriteria')
+                    debug_cuy('👎 pesan tidak sesuai kata kunci')
                     delete_message(message_id)
         # * handle jika isi list kosong
         else:
