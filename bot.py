@@ -48,6 +48,9 @@ def download_photo(url):
         with open(temp_img, "wb") as img:
             img.write(response.content)
         debug_cuy("👌 gambar berhasil di unduh")
+    except tweepy.TweepError as e:
+        debug_cuy('😡 ' + e.response.text)
+        pass
     except Exception as e:
         print(e)
         pass
