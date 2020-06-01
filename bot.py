@@ -12,7 +12,7 @@ auth.set_access_token(config.access_token, config.access_token_secret)
 api = tweepy.API(auth)
 
 auth_download = OAuth1(config.consumer_key, config.consumer_secret, config.access_token, config.access_token_secret)
-temp_image = "./tmp/img-tmp.jpg"
+temp_img = "./tmp/img-tmp.jpg"
 
 
 def debug_cuy(text):
@@ -76,9 +76,9 @@ while True:
                         media_type = attachment_media['type']
                         media_url = attachment_media['media_url']
                         if media_type == 'photo':
-                            debug_cuy('🖼 pesan berisi gambar')
+                            debug_cuy('🏙 pesan berisi gambar')
                             download_photo(media_url)
-                            make_tweet_with_image(temp_image, text)
+                            make_tweet_with_image(temp_img, text)
                             delete_message(message_id)
                         else:
                             debug_cuy('😓 tidak boleh video')
