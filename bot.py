@@ -113,3 +113,6 @@ while True:
     except tweepy.TweepError as e:
         debug_cuy('😡 ' + e.response.json()['errors'][0]['message'].lower())
         pass
+    except tweepy.TweepError as e:
+        debug_cuy('😡 ' + e.response.text)
+        pass
