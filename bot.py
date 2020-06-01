@@ -29,10 +29,10 @@ def make_tweet(text):
         debug_cuy("🚀 membuat tweet baru")
         api.update_status(text)
     except tweepy.TweepError as e:
-        debug_cuy('😡 ' + e.response.json()['errors'][0]['message'].lower())
-        pass
-    except tweepy.TweepError as e:
         debug_cuy('😡 ' + e.response.text)
+        pass
+    except Exception as e:
+        print(e)
         pass
 
 
@@ -41,10 +41,10 @@ def make_tweet_with_image(file, text):
         debug_cuy("🚀 membuat tweet baru dengan gambar")
         api.update_with_media(filename=file, status=text)
     except tweepy.TweepError as e:
-        debug_cuy('😡 ' + e.response.json()['errors'][0]['message'].lower())
-        pass
-    except tweepy.TweepError as e:
         debug_cuy('😡 ' + e.response.text)
+        pass
+    except Exception as e:
+        print(e)
         pass
 
 
@@ -113,12 +113,12 @@ while True:
         sleep(60)
     # ! handle jika ada error
     except tweepy.RateLimitError as e:
-        debug_cuy('😡 ' + e.response.json()['errors'][0]['message'].lower())
+        debug_cuy('😡 ' + e.response.text)
         sleep(60)
         pass
     except tweepy.TweepError as e:
-        debug_cuy('😡 ' + e.response.json()['errors'][0]['message'].lower())
-        pass
-    except tweepy.TweepError as e:
         debug_cuy('😡 ' + e.response.text)
+        pass
+    except Exception as e:
+        print(e)
         pass
