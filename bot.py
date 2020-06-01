@@ -31,6 +31,9 @@ def make_tweet(text):
     except tweepy.TweepError as e:
         debug_cuy('😡 ' + e.response.json()['errors'][0]['message'].lower())
         pass
+    except tweepy.TweepError as e:
+        debug_cuy('😡 ' + e.response.text)
+        pass
 
 
 def make_tweet_with_image(file, text):
