@@ -4,10 +4,15 @@ from datetime import datetime
 import pytz
 import sys
 from time import sleep
+import requests
+from requests_oauthlib import OAuth1
 
 auth = tweepy.OAuthHandler(config.consumer_key, config.consumer_secret)
 auth.set_access_token(config.access_token, config.access_token_secret)
 api = tweepy.API(auth)
+
+auth_download = OAuth1(config.consumer_key, config.consumer_secret, config.access_token, config.access_token_secret)
+temp_image = "./tmp/img-tmp.jpg"
 
 
 def debug_cuy(text):
@@ -28,6 +33,26 @@ def make_tweet(text):
         pass
 
 
+def make_tweet_with_image(file, text):
+    try:
+        debug_cuy("🚀 membuat tweet baru dengan gambar")
+        api.update_with_media(filename=file, status=text)
+    except tweepy.TweepError as e:
+        debug_cuy('😡 ' + e.response.json()['errors'][0]['message'].lower())
+        pass
+
+
+def download_photo(url):
+    try:
+        response = requests.get(url, auth=auth_download)
+        with open(temp_img, "wb") as img:
+            img.write(response.content)
+        debug_cuy("👌 gambar berhasil di unduh")
+    except Exception as e:
+        print(e)
+        pass
+
+
 while True:
     # * mencoba mengambil pesan
     try:
@@ -38,26 +63,30 @@ while True:
             for x in range(len(list)):
                 message_id = list[x].id
                 message_data = list[x].message_create['message_data']
-                message_data_text = message_data['text']
-                debug_cuy('💌 ada pesan "'+message_data_text+'"')
+                text = message_data['text']
+                debug_cuy('💌 ada pesan "'+text+'"')
                 # * cek ada keyword
-                if config.keywords in message_data_text and len(message_data_text) <= 280:
+                if config.keywords in text and len(text) <= 280:
                     debug_cuy('👍 kriteria pesan sesuai')
                     # * menghapus keyword dari text
-                    message_data_text = message_data_text.replace(config.keywords, '')
+                    text = text.replace(config.keywords, '')
                     # * mencoba cek ada attachment tidak
                     try:
-                        message_data_attachment_media_type = message_data['attachment']['media']['type']
-                        if message_data_attachment_media_type == 'photo':
-                            debug_cuy('😓 belom support photo')
+                        attachment_media = message_data['attachment']['media']
+                        media_type = attachment_media['type']
+                        media_url = attachment_media['media_url']
+                        if media_type == 'photo':
+                            debug_cuy('🖼 pesan berisi gambar')
+                            download_photo(media_url)
+                            make_tweet_with_image(temp_image, text)
                             delete_message(message_id)
                         else:
-                            debug_cuy('😓 belom support video')
+                            debug_cuy('😓 tidak boleh video')
                             delete_message(message_id)
                     # * handle jika cuma text
                     except:
                         # * membuat tweet
-                        make_tweet(message_data_text)
+                        make_tweet(text)
                         delete_message(message_id)
                 else:
                     debug_cuy('👎 pesan tidak sesuai kriteria')
