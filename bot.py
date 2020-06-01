@@ -69,6 +69,7 @@ while True:
                 if config.keywords in text and len(text) <= 280:
                     debug_cuy('👍 pesan berisi kata kunci')
                     # * bersihkan kata kunci dari text
+                    debug_cuy('👋 menghapus kata kunci dari text')
                     text = text.replace(config.keywords, '')
                     # * proses jika text tidak kosong setelah di bersihkan
                     if text is not '':
