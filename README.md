@@ -1,13 +1,15 @@
 # python-twitter-menfess-bot
 
+Bot untuk akun twitter autobase / menfess. Semua pesan dikirim ke akun dan mengandung kata kunci akan menjadi tweet
+
 ## install
 
 `pip install -r requirements.txt`
 
 ## config
 
-1. open `config.py`
-2. edit key, token, and keywords
+1. buka `config.py`
+2. edit semua key dan token
 
 ## run
 
