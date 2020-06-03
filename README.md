@@ -1,6 +1,6 @@
 # python-twitter-menfess-bot
 
-Bot untuk akun twitter autobase / menfess. Semua pesan yang dikirim ke akun dan mengandung kata kunci akan menjadi tweet
+Bot untuk akun twitter autobase menfess. Semua pesan yang dikirim ke akun dan mengandung kata kunci akan menjadi tweet
 
 ## install
 
