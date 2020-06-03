@@ -17,4 +17,4 @@ Bot untuk akun twitter autobase menfess. Semua pesan yang dikirim ke akun dan me
 
 ## screenshot
 
-![ss](screenshot/ss.png)
+![ss](screenshot/ss2.png)
